@@ -1,4 +1,6 @@
-﻿const express = require('express');
+﻿require('dotenv').config();
+
+const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
@@ -30,7 +32,13 @@ const app = express();
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Connect to MongoDB
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/school_management';
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+    console.error('MONGODB_URI is not defined in environment variables');
+    console.error('Please create a .env file and add: MONGODB_URI=mongodb+srv://sourav11092002:6mU9yE9PzzdxUgcl@cluster0.dinkvg7.mongodb.net/school_management_system');
+    process.exit(1);
+}
+
 mongoose.connect(MONGODB_URI)
     .then(() => {
         console.log('Connected to MongoDB');
@@ -58,10 +66,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Nodemailer setup with App Password
 const transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    service: process.env.EMAIL_SERVICE || 'Gmail',
     auth: {
-        user: 'sourav11092002@gmail.com',  // Replace with your actual Gmail address
-        pass: 'yrnd auqr guvb ptnp'      // Replace with your generated app password
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
 });
 
@@ -74,13 +82,13 @@ async function createAdminIfNotExists() {
             return;
         }
 
-        const adminEmail = 'sourav11092002@gmail.com';
-        const adminPassword = 'adminpassword'; // Default password
+        const adminEmail = process.env.ADMIN_EMAIL;
+        const adminPassword = process.env.ADMIN_PASSWORD;
         const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
         const admin = new User({
             name: 'Admin',
-            email: 'sourav11092002@gmail.com',
+            email: adminEmail,
             role: 'admin',
             password: hashedPassword,
             uid: 'A0001',
@@ -95,7 +103,7 @@ async function createAdminIfNotExists() {
         console.log('Admin user created successfully');
 
         const mailOptions = {
-            from: 'sourav11092002@gmail.com',
+            from: adminEmail,
             to: adminEmail,
             subject: 'Admin Account Created',
             text: `Admin account has been created. Your UID is: A0001 and password is: ${adminPassword}`
@@ -224,7 +232,7 @@ app.post('/signup', upload.single('image'), async (req, res) => {
         };
 
         const mailOptions = {
-            from: 'sourav11092002@gmail.com',
+            from: process.env.EMAIL_USER,
             to: email,
             subject: 'Signup OTP',
             text: `Your OTP for signup is: ${otp}`
@@ -623,7 +631,7 @@ app.post('/admins/tournaments/:tournamentId/enrollments/:enrollmentId/update', a
         await tournament.save();
 
         const mailOptions = {
-            from: 'sourav11092002@gmail.com',
+            from: process.env.EMAIL_USER,
             to: enrollment.email,
             subject: action === 'approve' ? 'Enrollment Approved' : 'Enrollment Declined',
             text: action === 'approve'
@@ -933,10 +941,10 @@ const upload3 = multer({
 
 // Configure Nodemailer for email
 const transporter2 = nodemailer.createTransport({
-    service: 'gmail', // Use your email service provider
+    service: process.env.EMAIL_SERVICE || 'gmail',
     auth: {
-        user: 'sourav11092002@gmail.com',  // Replace with your actual Gmail address
-        pass: 'yqdx czoc gltu hlyi', // Replace with your email password or app-specific password
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     },
 });
 

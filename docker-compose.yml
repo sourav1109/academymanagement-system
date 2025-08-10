@@ -2,22 +2,18 @@ version: '3.8'
 
 services:
   app:
-    build: 
-      context: .
-      target: ${NODE_ENV:-development}
+    image: yourdockeruser/school-management-system:latest
     ports:
       - "3000:3000"
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/school_management
-      - NODE_ENV=${NODE_ENV:-development}
-      - SESSION_SECRET=${SESSION_SECRET:-dev_secret}
-      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
-      - SMTP_PORT=${SMTP_PORT:-587}
-      - SMTP_USER=${SMTP_USER:-your_smtp_user}
-      - SMTP_PASS=${SMTP_PASS:-your_smtp_pass}
+      - MONGODB_URI=${MONGODB_URI}
+      - NODE_ENV=${NODE_ENV}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
     volumes:
-      - .:/app
-      - /app/node_modules
       - ./public:/app/public
       - ./uploads:/app/uploads
       - ./logs:/app/logs
@@ -27,7 +23,6 @@ services:
     restart: unless-stopped
     networks:
       - app-network
-    command: ${COMMAND:-npm run dev}
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
       interval: 30s
@@ -56,4 +51,4 @@ networks:
 
 volumes:
   mongodb_data:
-    name: school_management_mongodb_data 
+    name: school_management_mongodb_data

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis Academy Performance Report</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        .form-header {
+            background-color: #3528a7;
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            margin-right: 10px;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-header text-center">
+            <h2>Tennis Academy Performance Report</h2>
+        </div>
+        <form action="/performancereport" method="POST" class="mt-4">
+            <!-- Student Dropdown -->
+            <div class="mb-3">
+                <label for="studentId" class="form-label">Select Student</label>
+                <select class="form-select" id="studentId" name="studentId" required>
+                    <option value="" disabled selected>Select Student</option>
+                    <option value="S1001">S1001 - John Doe</option>
+                    <option value="S1002">S1002 - Jane Smith</option>
+                    <option value="S1003">S1003 - Mike Johnson</option>
+                </select>
+            </div>
+
+            <!-- Teacher's UID -->
+            <div class="mb-3">
+                <label for="teacherUid" class="form-label">Teacher's UID</label>
+                <input type="text" class="form-control" id="teacherUid" name="teacherUid" placeholder="Enter Teacher's UID" required>
+            </div>
+
+            <!-- Performance Parameters -->
+            <h5 class="text-center mt-4 mb-3">Evaluation Parameters (Rate out of 10)</h5>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="fitness" class="form-label">Fitness Level</label>
+                    <input type="number" class="form-control" id="fitness" name="fitness" min="1" max="10" placeholder="1-10" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="technique" class="form-label">Technique</label>
+                    <input type="number" class="form-control" id="technique" name="technique" min="1" max="10" placeholder="1-10" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="consistency" class="form-label">Consistency</label>
+                    <input type="number" class="form-control" id="consistency" name="consistency" min="1" max="10" placeholder="1-10" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="focus" class="form-label">Focus</label>
+                    <input type="number" class="form-control" id="focus" name="focus" min="1" max="10" placeholder="1-10" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="agility" class="form-label">Agility</label>
+                    <input type="number" class="form-control" id="agility" name="agility" min="1" max="10" placeholder="1-10" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="strategy" class="form-label">Game Strategy</label>
+                    <input type="number" class="form-control" id="strategy" name="strategy" min="1" max="10" placeholder="1-10" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="stamina" class="form-label">Stamina</label>
+                    <input type="number" class="form-control" id="stamina" name="stamina" min="1" max="10" placeholder="1-10" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="attitude" class="form-label">Attitude</label>
+                    <input type="number" class="form-control" id="attitude" name="attitude" min="1" max="10" placeholder="1-10" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="sportsmanship" class="form-label">Sportsmanship</label>
+                    <input type="number" class="form-control" id="sportsmanship" name="sportsmanship" min="1" max="10" placeholder="1-10" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="progress" class="form-label">Overall Progress</label>
+                    <input type="number" class="form-control" id="progress" name="progress" min="1" max="10" placeholder="1-10" required>
+                </div>
+            </div>
+
+            <!-- Evaluation Date -->
+            <div class="mb-3">
+                <label for="evaluationDate" class="form-label">Evaluation Date</label>
+                <input type="date" class="form-control" id="evaluationDate" name="evaluationDate" required>
+            </div>
+
+            <!-- Buttons -->
+            <div class="text-center">
+                <button type="button" class="btn btn-secondary" onclick="location.href='/dashboard'">Back to Dashboard</button>
+                <button type="submit" class="btn btn-primary">Submit Report</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Example: Dynamically populate student list (use backend logic for real data)
+        const studentDropdown = document.getElementById('studentId');
+        const studentIds = ['S1004 - Sarah Lee', 'S1005 - David Clark', 'S1006 - Emily White'];
+
+        studentIds.forEach(student => {
+            const option = document.createElement('option');
+            const [id, name] = student.split(' - ');
+            option.value = id;
+            option.textContent = student;
+            studentDropdown.appendChild(option);
+        });
+    </script>
+</body>
+</html>

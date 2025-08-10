@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Student Attendance</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Mark Student Attendance</h1>
+        <form action="/admins/attendance/students" method="POST">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Attendance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% students.forEach(student => { %>
+                        <tr>
+                            <td><%= student.name %></td>
+                            <td>
+                                <select name="attendance[<%= student._id %>]" class="form-control">
+                                    <option value="Not Marked" <%= student.status === 'Not Marked' ? 'selected' : '' %>>Not Marked</option>
+                                    <option value="Present" <%= student.status === 'Present' ? 'selected' : '' %>>Present</option>
+                                    <option value="Absent" <%= student.status === 'Absent' ? 'selected' : '' %>>Absent</option>
+                                </select>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Save Attendance</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

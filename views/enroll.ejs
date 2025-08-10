@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll in Tournament</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 20px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-control-file {
+            border: none;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .navbar-text {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="path/to/logo.png" alt="Logo" style="width: 100px;">
+        </a>
+        <div class="navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <span class="navbar-text"><strong>Tournament:</strong> <%= tournament.name %></span>
+                </li>
+                <li class="nav-item">
+                    <span class="navbar-text"><strong>Date:</strong> <%= tournament.date %></span>
+                </li>
+                <li class="nav-item">
+                    <span class="navbar-text"><strong>Location:</strong> <%= tournament.location %></span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="mb-4">Enroll in Tournament</h1>
+        <form action="/tournaments/<%= tournament._id %>/enroll" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" class="form-control" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <input type="text" class="form-control" id="category" name="category" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="text" class="form-control" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="studentType">Are you an existing student?</label>
+                <select class="form-control" id="studentType" name="studentType" required>
+                    <option value="existing">Existing Student</option>
+                    <option value="outsider">Outsider</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="paymentProof">Payment Proof:</label>
+                <input type="file" class="form-control-file" id="paymentProof" name="paymentProof" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

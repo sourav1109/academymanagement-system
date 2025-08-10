@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coaching - XYZ Academy</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Header and Navigation Styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #9e57e0,rgb(16, 106, 179), #bf2052);
+            padding: 15px 30px;
+        }
+
+        .navbar__logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar__menu {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin: 0;
+        }
+
+        .navbar__item {
+            position: relative;
+        }
+
+        .navbar__link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar__link i {
+            font-size: 18px; /* Adjust icon size */
+        }
+
+        .navbar__link:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }
+        /* Coaching Section Styling */
+        .coaching-section {
+            background-color: #f9f9f9;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .coaching-heading {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .coaching-info-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .coaching-info {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .coaching-info:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .coaching-info img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .coaching-info-text {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .coaching-info-text h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .coaching-info-text p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .book-now-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .book-now-btn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        /* Footer Styling */
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0;
+        }
+
+        .footer-links li {
+            display: inline;
+            margin-right: 15px;
+        }
+
+        .footer-links li a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-links li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <nav class="navbar">
+        <div class="navbar__logo">XYZ ACADEMY</div>
+        <ul class="navbar__menu">
+            <li class="navbar__item">
+                <a href="/" class="navbar__link"><i data-feather="home"></i><span>Home</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/venue" class="navbar__link"><i data-feather="map-pin"></i><span>campus view</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/coaching" class="navbar__link"><i data-feather="book"></i><span> Learning standers</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/coaches" class="navbar__link"><i data-feather="user"></i><span> Teachers</span></a>
+            </li>
+           
+            <!-- <li class="navbar__item">
+                <a href="/booking" class="navbar__link"><i data-feather="calendar"></i><span>Booking</span></a>
+            </li> -->
+            <li class="navbar__item">
+                <a href="/news_events" class="navbar__link"><i data-feather="newspaper"></i><span>News & Events</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/contacts" class="navbar__link"><i data-feather="phone"></i><span>Contacts</span></a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Include Feather Icons script -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+
+    <br>
+
+    <div class="coaching-section">
+        <h1 class="coaching-heading">Explore Our Educational Programs</h1>
+        <div class="coaching-info-container">
+            <div class="coaching-info">
+                <img src="/public/images/primary-education.jpg" alt="Primary Education">
+                <div class="coaching-info-text">
+                    <h2>Primary Education</h2>
+                    <p>Building strong literacy and numeracy foundations for young learners.</p>
+                    <button class="book-now-btn">Enroll Now</button>
+                </div>
+            </div>
+
+            <div class="coaching-info">
+                <img src="/public/images/secondary-education.jpeg" alt="Secondary Education">
+                <div class="coaching-info-text">
+                    <h2>Secondary Education</h2>
+                    <p>Comprehensive curriculum to prepare students for future success.</p>
+                    <button class="book-now-btn">Enroll Now</button>
+                </div>
+            </div>
+
+            <div class="coaching-info">
+                <img src="/public/images/lab.jpg" alt="Science Lab">
+                <div class="coaching-info-text">
+                    <h2>Science and Technology</h2>
+                    <p>Hands-on learning in advanced science and computer labs.</p>
+                    <button class="book-now-btn">Enroll Now</button>
+                </div>
+            </div>
+
+            <div class="coaching-info">
+                <img src="/public/images/sports.jpeg" alt="Sports">
+                <div class="coaching-info-text">
+                    <h2>Sports and Physical Education</h2>
+                    <p>Promoting teamwork and fitness through engaging sports activities.</p>
+                    <button class="book-now-btn">Enroll Now</button>
+                </div>
+            </div>
+
+            <div class="coaching-info">
+                <img src="/public/images/ART.jpeg" alt="Arts">
+                <div class="coaching-info-text">
+                    <h2>Arts and Music</h2>
+                    <p>Encouraging creativity through arts and music classes.</p>
+                    <button class="book-now-btn">Enroll Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 XYZ Academy</p>
+        <ul class="footer-links">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+        </ul>
+    </footer>
+</body>
+</html>

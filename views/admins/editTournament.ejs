@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Tournament</title>
+</head>
+<body>
+    <h2>Edit Tournament</h2>
+    <form action="/admins/tournaments/<%= tournament._id %>/edit" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="<%= tournament.name %>">
+        <br>
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" value="<%= tournament.date.toISOString().split('T')[0] %>">
+        <br>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"><%= tournament.description %></textarea>
+        <br>
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>

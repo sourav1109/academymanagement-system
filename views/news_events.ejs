@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News and Events - XYZ  Academy</title>
+    <style>
+        /* Header and navigation styles */
+        .heading-nav {
+            background: linear-gradient(to right, #9e57e0, rgb(16, 106, 179), #bf2052); /* Violet to Indigo */
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .heading-title {
+            color: #fbf9f9; /* Light gray */
+            font-size: 24px;
+            font-family: 'Flanella', cursive; /* Flanella font style */
+            display: inline-block;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #9e57e0,rgb(16, 106, 179), #bf2052);
+            padding: 15px 30px;
+        }
+
+        .navbar__logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar__menu {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin: 0;
+        }
+
+        .navbar__item {
+            position: relative;
+        }
+
+        .navbar__link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar__link i {
+            font-size: 18px; /* Adjust icon size */
+        }
+
+        .navbar__link:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }       
+        
+        /* News and events section styles */
+        .news-events-section {
+            padding: 50px 0;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+
+        .news-events-heading {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .news-events-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Center the cards */
+            gap: 20px; /* Space between cards */
+        }
+
+        .news-event {
+            flex: 1 1 calc(33.333% - 40px); /* Responsive 3-column layout */
+            max-width: 300px; /* Limit the maximum width */
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s; /* Hover effect */
+        }
+
+        .news-event:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .news-event img,
+        .news-event video {
+            width: 100%; /* Ensure media takes up full width */
+            height: auto; /* Maintain aspect ratio */
+            border-bottom: 1px solid #ddd;
+            object-fit: cover; /* Prevent image distortion */
+        }
+
+        .news-event-info {
+            padding: 20px;
+            text-align: left;
+        }
+
+        .news-event-info h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: green;
+        }
+
+        .news-event-info p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: #333; /* Dark gray */
+            color: #fff; /* White text */
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        .footer-links li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .footer-links li a {
+            color: #fff; /* White text */
+            text-decoration: none;
+        }
+
+        .footer-links li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Media Queries for Responsive Design */
+        @media (max-width: 768px) {
+            .news-event {
+                flex: 1 1 calc(50% - 20px); /* Switch to 2-column layout */
+            }
+        }
+
+        @media (max-width: 576px) {
+            .news-event {
+                flex: 1 1 100%; /* Single-column layout */
+            }
+        }
+    </style>
+</head>
+<body>
+   
+    <nav class="navbar">
+        <div class="navbar__logo">XYZ ACADEMY</div>
+        <ul class="navbar__menu">
+            <li class="navbar__item">
+                <a href="/" class="navbar__link"><i data-feather="home"></i><span>Home</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/venue" class="navbar__link"><i data-feather="map-pin"></i><span>campus view</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/coaching" class="navbar__link"><i data-feather="book"></i><span> Learning standers</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/coaches" class="navbar__link"><i data-feather="user"></i><span> Teachers</span></a>
+            </li>
+           
+            <!-- <li class="navbar__item">
+                <a href="/booking" class="navbar__link"><i data-feather="calendar"></i><span>Booking</span></a>
+            </li> -->
+            <li class="navbar__item">
+                <a href="/news_events" class="navbar__link"><i data-feather="newspaper"></i><span>News & Events</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/contacts" class="navbar__link"><i data-feather="phone"></i><span>Contacts</span></a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Include Feather Icons script -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+
+    <div class="news-events-section">
+        <div class="container">
+            <h1 class="news-events-heading">Latest News and Events</h1>
+            <div class="news-events-container">
+                <% if (newsEvents && newsEvents.length > 0) { %>
+                    <% newsEvents.forEach(news => { %>
+                        <div class="news-event">
+                            <% if (news.mediaType === 'image') { %>
+                                <img src="<%= news.media %>" alt="News Image">
+                            <% } else if (news.mediaType === 'video') { %>
+                                <video src="<%= news.media %>" controls></video>
+                            <% } %>
+                            <div class="news-event-info">
+                                <h2><%= news.title %></h2>
+                                <p>Date: <%= news.date %></p>
+                                <p>Location: <%= news.location %></p>
+                                <p>Description: <%= news.description %></p>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No news or events available at the moment.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2024 XYZ  Academy</p>
+                </div>
+                <div class="col-md-6">
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

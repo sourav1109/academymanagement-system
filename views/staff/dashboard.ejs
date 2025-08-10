@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        .card:hover {
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
+            transition: 0.3s;
+        }
+        .profile-img {
+            max-width: 150px;
+            border-radius: 50%;
+        }
+        .btn{
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-primary text-white p-3"style=" background: linear-gradient(to right, #9e57e0,rgb(16, 106, 179), #bf2052);">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h4"><i class="fas fa-chalkboard-teacher"></i> Staff Dashboard</h1>
+                <nav >
+                    <ul class="nav">
+                        <li class="nav-item"><a class="nav-link text-white" href="/staff/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/staff/attendance/students"><i class="fas fa-user-check"></i> Mark Attendance</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/staff/attendance-records"><i class="fas fa-list"></i> Attendance Records</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/staff/attendance-rectification"><i class="fas fa-edit"></i> Rectification</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/staff/attendance-rectification/status"><i class="fas fa-edit"></i> Rectification Status</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mt-4">
+        <div class="text-center mb-4">
+            <img src="<%= user.image %>" alt="Profile Picture" class="profile-img">
+            <h2>Welcome, <%= user.name %></h2>
+            <p>UID: <%= user.uid %> | Email: <%= user.email %> | Role: <%= user.role %></p>
+        </div>
+
+        <div class="container mt-5">
+            <% if (message) { %>
+                <div class="alert alert-<%= message.type === 'success' ? 'success' : 'danger' %> alert-dismissible fade show" role="alert">
+                    <%= message.text %>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="row">
+            <!-- Announcements -->
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-bullhorn"></i> Announcements</h5>
+                        <ul class="list-group list-group-flush">
+                            <% announcements.forEach(announcement => { %>
+                                <li class="list-group-item">
+                                    <h6><%= announcement.title %></h6>
+                                    <p><%= announcement.content %></p>
+                                    <% if (announcement.createdBy) { %>
+                                        <small>Posted by: <%= announcement.createdBy.name %> (UID: <%= announcement.createdBy.uid %>) on <%= announcement.date.toDateString() %></small>
+                                    <% } else { %>
+                                        <small>Posted on <%= announcement.date.toDateString() %></small>
+                                    <% } %>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mark Attendance -->
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><i class="fas fa-user-check"></i> Mark Students Attendance</h5>
+                        <p class="card-text">Manage attendance records for students.</p>
+                        <a href="/staff/attendance/students" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Go</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Timetable -->
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><i class="fas fa-calendar-alt"></i> View Timetable</h5>
+                        <p class="card-text">Access your schedule and notes.</p>
+                        <a href="/public/1736093230627-Combinatorics _ DPP 05 Discussion Notes.pdf" class="btn btn-primary"><i class="fas fa-book"></i> Go</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Reports -->
+            <!-- <div class="col-lg-6 col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><i class="fas fa-heartbeat"></i> Health Reports</h5>
+                        <p class="card-text">Add or update health reports for students.</p>
+                        <a href="/healthreport" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Go</a>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Performance Reports -->
+            <div class="col-lg-6 col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><i class="fas fa-chart-line"></i> Performance Reports</h5>
+                        <p class="card-text">Add or update performance reports for students.</p>
+                        <a href="/performancereport" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-3 mt-5">
+        <p>&copy; 2024 Your Company. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

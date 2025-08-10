@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Academic Report</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .details-label {
+            font-weight: bold;
+            color: #343a40;
+        }
+        .details-value {
+            font-size: 1rem;
+            color: #495057;
+        }
+        .text-center h5 {
+            font-weight: bold;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header text-center">
+            <h2>Student Academic Report</h2>
+        </div>
+        <div class="mt-4">
+            <!-- Student Details -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p class="details-label">Student ID:</p>
+                    <p class="details-value" id="studentId">S1001</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="details-label">Student Name:</p>
+                    <p class="details-value" id="studentName">John Doe</p>
+                </div>
+            </div>
+
+            <!-- Teacher Details -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p class="details-label">Class Teacher:</p>
+                    <p class="details-value" id="teacherName">Ms. Smith</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="details-label">Evaluation Date:</p>
+                    <p class="details-value" id="evaluationDate">2025-01-05</p>
+                </div>
+            </div>
+
+            <!-- Academic Performance Parameters -->
+            <div class="text-center mt-4 mb-3">
+                <h5>Academic Performance</h5>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <p class="details-label">Mathematics:</p>
+                    <p class="details-value" id="math">85</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="details-label">Science:</p>
+                    <p class="details-value" id="science">90</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="details-label">English:</p>
+                    <p class="details-value" id="english">88</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="details-label">History:</p>
+                    <p class="details-value" id="history">92</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="details-label">Art:</p>
+                    <p class="details-value" id="art">95</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <p class="details-label">Physical Education:</p>
+                    <p class="details-value" id="pe">89</p>
+                </div>
+            </div>
+
+            <!-- Overall Remarks -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <p class="details-label">Overall Remarks:</p>
+                    <p class="details-value" id="remarks">Excellent progress! Keep up the great work.</p>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="text-center mt-4">
+                <button type="button" class="btn btn-secondary" onclick="location.href='/dashboard'">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Example: Replace this with real backend data using AJAX or server-side rendering
+        const reportData = {
+            studentId: 'S1001',
+            studentName: 'John Doe',
+            teacherName: 'Ms. Smith',
+            evaluationDate: '2025-01-05',
+            performance: {
+                math: 85,
+                science: 90,
+                english: 88,
+                history: 92,
+                art: 95,
+                pe: 89
+            },
+            remarks: 'Excellent progress! Keep up the great work.'
+        };
+
+        // Populate the data into the DOM
+        document.getElementById('studentId').textContent = reportData.studentId;
+        document.getElementById('studentName').textContent = reportData.studentName;
+        document.getElementById('teacherName').textContent = reportData.teacherName;
+        document.getElementById('evaluationDate').textContent = reportData.evaluationDate;
+        document.getElementById('math').textContent = reportData.performance.math;
+        document.getElementById('science').textContent = reportData.performance.science;
+        document.getElementById('english').textContent = reportData.performance.english;
+        document.getElementById('history').textContent = reportData.performance.history;
+        document.getElementById('art').textContent = reportData.performance.art;
+        document.getElementById('pe').textContent = reportData.performance.pe;
+        document.getElementById('remarks').textContent = reportData.remarks;
+    </script>
+</body>
+</html>

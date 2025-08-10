@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venue - XYZ Academy</title>
+    <style>
+        /* Internal CSS for the venue section */
+        /* CSS styles for heading and navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #9e57e0,rgb(16, 106, 179), #bf2052);
+            padding: 15px 30px;
+        }
+
+        .navbar__logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar__menu {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            margin: 0;
+        }
+
+        .navbar__item {
+            position: relative;
+        }
+
+        .navbar__link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar__link i {
+            font-size: 18px; /* Adjust icon size */
+        }
+
+        .navbar__link:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }
+        /* CSS styles for venue section */
+        .venue-nav {
+            background-image: url('/public/images/img4.jpg'); /* Background image for venue section */
+            background-size: cover;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .venue-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        .venue-links li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .venue-links li a {
+            color: #fbf9f9;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .venue-links li a:hover {
+            color: #fff;
+        }
+
+        .venue-section {
+            text-align: center;
+            padding: 100px 0;
+            color: #fff;
+            position: relative;
+        }
+
+        .venue-section h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .venue-section p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .book-now-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 30px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .book-now-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        /* CSS styles for gallery */
+        .gallery {
+    padding: 50px 0;
+}
+
+.gallery-heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Added for consistent spacing */
+}
+
+.gallery-item {
+    width: calc(25% - 20px); /* Adjusts to 3 items per row */
+    margin: 10px;
+    overflow: hidden;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f3f3f3; /* Optional background color */
+    aspect-ratio: 4 / 3; /* Ensures consistent item aspect ratio */
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures images fill the item without distortion */
+    transition: transform 0.3s ease;
+}
+
+.gallery-item img:hover {
+    transform: scale(1.1);
+}
+/* CSS styles for footer */
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        .footer-links li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .footer-links li a {
+            color: #fbf9f9;
+            text-decoration: none;
+        }
+
+        .footer-links li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+   
+
+    
+    <nav class="navbar">
+        <div class="navbar__logo">XYZ ACADEMY</div>
+        <ul class="navbar__menu">
+            <li class="navbar__item">
+                <a href="/" class="navbar__link"><i data-feather="home"></i><span>Home</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/venue" class="navbar__link"><i data-feather="map-pin"></i><span>campus view</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/coaching" class="navbar__link"><i data-feather="book"></i><span> Learning standers</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/coaches" class="navbar__link"><i data-feather="user"></i><span> Teachers</span></a>
+            </li>
+           
+            <!-- <li class="navbar__item">
+                <a href="/booking" class="navbar__link"><i data-feather="calendar"></i><span>Booking</span></a>
+            </li> -->
+            <li class="navbar__item">
+                <a href="/news_events" class="navbar__link"><i data-feather="newspaper"></i><span>News & Events</span></a>
+            </li>
+            <li class="navbar__item">
+                <a href="/contacts" class="navbar__link"><i data-feather="phone"></i><span>Contacts</span></a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Include Feather Icons script -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+
+
+    <div class="venue-section"style="background-image: url('/public/images/img4.jpg');">
+        <div class="container">
+            <h1 >Welcome to Our gallery</h1>
+            <p>Discover our state-of-the-art facilities and book your experience today!</p>
+            <button class="book-now-btn">Book Now</button>
+        </div>
+    </div>
+
+    <div class="gallery">
+        <div class="container">
+            <h2 class="gallery-heading"style="text-align: center; color:green;">Our Gallery</h2>
+            <div class="gallery-container">
+                <!-- Repeat this div structure for each image -->
+                <div class="gallery-item">
+                    <img src="/public/images/classroom.jpg" alt="Gallery Image">
+                </div>
+                <div class="gallery-item">
+                    <img src="/public/images/library.jpeg" alt="Gallery Image">
+                </div>
+                <div class="gallery-item">
+                    <img src="/public/images/lab.jpg" alt="Gallery Image">
+                </div>
+                <!-- End of image div -->
+                <!-- Repeat this div structure for each image -->
+                <!-- Add more image containers here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2024 XYZ  Academy</p>
+                </div>
+                <div class="col-md-6">
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Activate carousel
+        $('.carousel').carousel();
+    </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Tournaments</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="bg-primary text-white p-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>Manage Tournaments</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item"><a class="nav-link text-white" href="/admins/dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/admins/manage-users">Manage Users</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/admins/announcements">Announcements</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/admins/tournaments">Tournaments</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/logout">Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mt-5">
+        <section class="text-center">
+            <h2>Add Tournament</h2>
+            <form action="/admins/tournaments" method="POST">
+                <div class="form-group">
+                    <input type="text" name="name" class="form-control" placeholder="Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="date" name="date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <textarea name="description" class="form-control" placeholder="Description" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Tournament</button>
+            </form>
+        </section>
+
+        <section class="mt-4">
+            <h2>All Tournaments</h2>
+            <ul class="list-group">
+                <% tournaments.forEach(tournament => { %>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4><%= tournament.name %></h4>
+                            <p>Date: <%= new Date(tournament.date).toDateString() %></p>
+                            <p><%= tournament.description %></p>
+                            <% if (tournament.result) { %>
+                                <p>Results: <a href="/<%= tournament.result %>" target="_blank">Download</a></p>
+
+                            <% } %>
+                        </div>
+                        <div>
+                            <a href="/admins/tournaments/<%= tournament._id %>/enrolled" class="btn btn-info btn-sm mr-2">View Enrolled Students</a>
+                            <a href="/admins/tournaments/<%= tournament._id %>/edit" class="btn btn-warning btn-sm mr-2">Edit</a>
+                            <form action="/admins/tournaments/<%= tournament._id %>/delete" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                            <button 
+                                class="btn btn-success btn-sm" 
+                                data-toggle="modal" 
+                                data-target="#publishResultModal" 
+                                onclick="openPublishResultModal('<%= tournament._id %>', '<%= tournament.name %>')">
+                                Publish Results
+                            </button>
+                            <button 
+                                class="btn btn-danger btn-sm" 
+                                onclick="stopTournamentEntry('<%= tournament._id %>')">
+                                Stop Entry
+                            </button>
+                        </div>
+                    </li>
+                <% }) %>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Publish Results Modal -->
+    <div class="modal fade" id="publishResultModal" tabindex="-1" role="dialog" aria-labelledby="publishResultModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="publishResultForm" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="publishResultModalLabel">Publish Results</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="tournamentDetails"></p>
+                        <div class="form-group">
+                            <label for="resultFile">Upload Result File:</label>
+                            <input type="file" id="resultFile" name="resultFile" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message:</label>
+                            <textarea id="message" name="message" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div id="resultPublishError" class="alert alert-danger d-none"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Publish</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light text-center py-3">
+        <p>&copy; 2025 Your Company</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        let selectedTournamentId = "";
+
+        function openPublishResultModal(tournamentId, tournamentName) {
+            selectedTournamentId = tournamentId;
+            document.getElementById("tournamentDetails").innerText = `Publishing results for: ${tournamentName}`;
+            document.getElementById("resultPublishError").classList.add("d-none");
+        }
+
+        async function stopTournamentEntry(tournamentId) {
+            if (confirm("Are you sure you want to stop entries for this tournament?")) {
+                try {
+                    const response = await fetch(`/admins/tournaments/${tournamentId}/stop-entry`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        alert(result.message);
+                        location.reload();
+                    } else {
+                        alert(result.message || "Failed to stop entries.");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("An unexpected error occurred. Please try again.");
+                }
+            }
+        }
+
+        document.getElementById("publishResultForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append("resultFile", document.getElementById("resultFile").files[0]);
+            formData.append("message", document.getElementById("message").value);
+
+            try {
+                const response = await fetch(`/admins/tournaments/${selectedTournamentId}/publish-results`, {
+                    method: "POST",
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message);
+                    location.reload();
+                } else {
+                    const errorMessage = result.message || "Failed to publish results. Please try again.";
+                    document.getElementById("resultPublishError").innerText = errorMessage;
+                    document.getElementById("resultPublishError").classList.remove("d-none");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById("resultPublishError").innerText = "An unexpected error occurred. Please try again.";
+                document.getElementById("resultPublishError").classList.remove("d-none");
+            }
+        });
+    </script>
+</body>
+</html>

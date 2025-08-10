@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Numans');
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Numans', sans-serif;
+            background: linear-gradient(to right, #9e57e0, rgb(16, 106, 179), #bf2052);
+            background-size: cover;
+        }
+
+        .container {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container img {
+            width: 100px;
+        }
+
+        .card {
+            width: 400px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .card-title, .card-text, .form-group label, .btn-primary {
+            color: #ffffff;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="/images/logo.png" alt="Logo">
+            <h1 class="text-white">Academy Name</h1>
+        </div>
+        <div class="card">
+            <h3 class="card-title text-center">Verify Signup OTP</h3>
+            <div class="alert alert-info text-center" role="alert">
+                OTP has been successfully sent to your email. Please enter the OTP below.
+            </div>
+            <form action="/verify-signup-otp" method="POST">
+                <input type="hidden" name="email" value="<%= email %>" required>
+                <div class="form-group">
+                    <label for="otp">OTP</label>
+                    <input type="text" class="form-control" id="otp" name="otp" placeholder="OTP" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Verify OTP</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

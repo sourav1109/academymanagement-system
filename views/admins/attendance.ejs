@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Attendance</title>
+</head>
+<body>
+    <h1>Manage Attendance</h1>
+
+    <h2>Mark Attendance for Students</h2>
+    <form action="/students/attendance" method="POST">
+        <label for="studentId">Select Student:</label>
+        <select name="studentId" id="studentId" required>
+            <% students.forEach(student => { %>
+                <option value="<%= student._id %>"><%= student.name %></option>
+            <% }) %>
+        </select>
+        <button type="submit">Mark Present</button>
+    </form>
+
+    <h2>Mark Attendance for Staff</h2>
+    <form action="/staff/attendance" method="POST">
+        <label for="staffId">Select Staff Member:</label>
+        <select name="staffId" id="staffId" required>
+            <% staff.forEach(staffMember => { %>
+                <option value="<%= staffMember._id %>"><%= staffMember.name %></option>
+            <% }) %>
+        </select>
+        <button type="submit">Mark Present</button>
+    </form>
+
+    <h2>Students' Attendance Records</h2>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Attendance</th>
+        </tr>
+        <% students.forEach(student => { %>
+            <tr>
+                <td><%= student.name %></td>
+                <td>
+                    <% student.attendance.forEach(att => { %>
+                        <p><%= att.date %>: <%= att.status %></p>
+                    <% }) %>
+                </td>
+            </tr>
+        <% }) %>
+    </table>
+
+    <h2>Staff's Attendance Records</h2>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Attendance</th>
+        </tr>
+        <% staff.forEach(staffMember => { %>
+            <tr>
+                <td><%= staffMember.name %></td>
+                <td>
+                    <% staffMember.attendance.forEach(att => { %>
+                        <p><%= att.date %>: <%= att.status %></p>
+                    <% }) %>
+                </td>
+            </tr>
+        <% }) %>
+    </table>
+</body>
+</html>

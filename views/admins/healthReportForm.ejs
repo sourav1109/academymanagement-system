@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Report Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+        }
+        .form-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .btn-primary {
+            background-color: #6a00f4;
+            border: none;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            background-color: #3a0088;
+        }
+        h2 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="form-container">
+            <h2>Health Report Form</h2>
+            <form action="/admins/health-report-form" method="POST">
+                <div class="form-group">
+                    <label for="studentId">Student ID:</label>
+                    <input type="text" class="form-control" id="studentId" name="studentId" oninput="fetchStudentName()" required>
+                </div>
+                <div class="form-group">
+                    <label for="studentName">Student Name:</label>
+                    <input type="text" class="form-control" id="studentName" name="studentName" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="param1">Parameter 1:</label>
+                    <input type="number" class="form-control" id="param1" name="param1" min="0" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="param2">Parameter 2:</label>
+                    <input type="number" class="form-control" id="param2" name="param2" min="0" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="param3">Parameter 3:</label>
+                    <input type="number" class="form-control" id="param3" name="param3" min="0" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="param4">Parameter 4:</label>
+                    <input type="number" class="form-control" id="param4" name="param4" min="0" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="param5">Parameter 5:</label>
+                    <input type="number" class="form-control" id="param5" name="param5" min="0" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="param6">Parameter 6:</label>
+                    <input type="number" class="form-control" id="param6" name="param6" min="0" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="param7">Parameter 7:</label>
+                    <input type="number" class="form-control" id="param7" name="param7" min="0" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="param8">Parameter 8:</label>
+                    <input type="number" class="form-control" id="param8" name="param8" min="0" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="param9">Parameter 9:</label>
+                    <input type="number" class="form-control" id="param9" name="param9" min="0" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="param10">Parameter 10:</label>
+                    <input type="number" class="form-control" id="param10" name="param10" min="0" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="filledBy">Filled By:</label>
+                    <input type="text" class="form-control" id="filledBy" name="filledBy" value="<%= user.name %>" readonly>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function fetchStudentName() {
+            const studentId = document.getElementById('studentId').value;
+            if (studentId.length > 0) {
+                fetch(`/api/student/${studentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('studentName').value = data.name || '';
+                    });
+            }
+        }
+    </script>
+</body>
+</html>

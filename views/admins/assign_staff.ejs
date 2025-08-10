@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Staff</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .time-slot {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .teacher-assignment {
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .teacher-assignment:hover {
+            background-color: #f8f9fa;
+        }
+        .alert {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="mb-4">Assign Staff to Classes</h2>
+        
+        <!-- Selection Form -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form id="assignmentForm" class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="class">Class</label>
+                            <select class="form-control" id="class" name="class" required>
+                                <option value="">Select Class</option>
+                                <% for(let i = 1; i <= 12; i++) { %>
+                                    <option value="<%= i %>">Class <%= i %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="section">Section</label>
+                            <select class="form-control" id="section" name="section" required>
+                                <option value="">Select Section</option>
+                                <% ['A', 'B', 'C', 'D', 'E'].forEach(section => { %>
+                                    <option value="<%= section %>">Section <%= section %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="day">Day</label>
+                            <select class="form-control" id="day" name="day" required>
+                                <option value="">Select Day</option>
+                                <% ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].forEach(day => { %>
+                                    <option value="<%= day %>"><%= day %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="academicYear">Academic Year</label>
+                            <select class="form-control" id="academicYear" name="academicYear" required>
+                                <option value="">Select Year</option>
+                                <% const currentYear = new Date().getFullYear(); %>
+                                <option value="<%= currentYear %>-<%= currentYear + 1 %>"><%= currentYear %>-<%= currentYear + 1 %></option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Time Slots and Assignments -->
+        <div id="assignmentsContainer">
+            <!-- Time slots will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const timeSlots = [
+            { start: '08:00', end: '08:45' },
+            { start: '08:45', end: '09:30' },
+            { start: '09:30', end: '10:15' },
+            { start: '10:15', end: '11:00' },
+            { start: '11:00', end: '11:45' },
+            { start: '11:45', end: '12:30' },
+            { start: '12:30', end: '13:15' },
+            { start: '13:15', end: '14:00' }
+        ];
+
+        const subjects = [
+            'Mathematics', 'Science', 'English', 'History', 
+            'Geography', 'Computer Science', 'Physical Education', 
+            'Art', 'Music', 'Languages'
+        ];
+
+        function loadAssignments() {
+            const classValue = $('#class').val();
+            const section = $('#section').val();
+            const day = $('#day').val();
+            const academicYear = $('#academicYear').val();
+
+            if (!classValue || !section || !day || !academicYear) {
+                return;
+            }
+
+            $.get(`/api/staff-assignments/${classValue}/${section}/${day}/${academicYear}`, function(assignments) {
+                const container = $('#assignmentsContainer');
+                container.empty();
+
+                timeSlots.forEach(slot => {
+                    const assignment = assignments.find(a => 
+                        a.timeSlot.startTime === slot.start && 
+                        a.timeSlot.endTime === slot.end
+                    );
+
+                    const timeSlotDiv = $('<div>').addClass('time-slot');
+                    timeSlotDiv.append(`<h5>${slot.start} - ${slot.end}</h5>`);
+
+                    subjects.forEach(subject => {
+                        const assignmentDiv = $('<div>').addClass('teacher-assignment');
+                        const currentAssignment = assignment && assignment.subject === subject ? assignment : null;
+
+                        const select = $('<select>').addClass('form-control teacher-select')
+                            .attr('data-subject', subject)
+                            .attr('data-start-time', slot.start)
+                            .attr('data-end-time', slot.end);
+
+                        select.append('<option value="">Select Teacher</option>');
+                        
+                        // Load teachers for this subject
+                        $.get('/api/teachers', function(teachers) {
+                            teachers.forEach(teacher => {
+                                const option = $('<option>')
+                                    .val(teacher._id)
+                                    .text(teacher.name);
+                                
+                                if (currentAssignment && currentAssignment.teacher === teacher._id) {
+                                    option.prop('selected', true);
+                                }
+                                
+                                select.append(option);
+                            });
+                        });
+
+                        assignmentDiv.append(`<label>${subject}</label>`);
+                        assignmentDiv.append(select);
+                        assignmentDiv.append('<div class="alert alert-danger"></div>');
+                        
+                        timeSlotDiv.append(assignmentDiv);
+                    });
+
+                    container.append(timeSlotDiv);
+                });
+            });
+        }
+
+        // Event listeners
+        $('#class, #section, #day, #academicYear').change(loadAssignments);
+
+        // Handle teacher assignment
+        $(document).on('change', '.teacher-select', function() {
+            const select = $(this);
+            const subject = select.data('subject');
+            const startTime = select.data('start-time');
+            const endTime = select.data('end-time');
+            const teacherId = select.val();
+            const alertDiv = select.siblings('.alert');
+
+            if (!teacherId) {
+                alertDiv.hide();
+                return;
+            }
+
+            const data = {
+                class: $('#class').val(),
+                section: $('#section').val(),
+                day: $('#day').val(),
+                academicYear: $('#academicYear').val(),
+                subject: subject,
+                teacher: teacherId,
+                timeSlot: {
+                    startTime: startTime,
+                    endTime: endTime
+                }
+            };
+
+            $.ajax({
+                url: '/api/staff-assignments',
+                method: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function(response) {
+                    alertDiv.hide();
+                    loadAssignments();
+                },
+                error: function(xhr) {
+                    alertDiv.text(xhr.responseJSON.error).show();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

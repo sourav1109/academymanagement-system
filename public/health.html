@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        .player-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+        }
+        .player-details {
+            padding: 20px;
+        }
+        .player-details h5 {
+            margin-bottom: 15px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .score-list {
+            list-style: none;
+            padding: 0;
+        }
+        .score-list li {
+            margin-bottom: 5px;
+            background: #e9ecef;
+            padding: 8px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="player-header">
+            <h2>Player Details</h2>
+        </div>
+        <div class="player-details">
+            <h5><strong>Player Name:</strong> <span id="playerName">John Doe</span></h5>
+            <h5><strong>Player ID:</strong> <span id="playerId">T1001</span></h5>
+            <h5><strong>Position:</strong> <span id="position">Intermediate</span></h5>
+            <h5><strong>Highest Score:</strong> <span id="highestScore">85</span></h5>
+            <h5><strong>Previous Scores:</strong></h5>
+            <ul class="score-list" id="previousScores">
+                <li>50</li>
+                <li>75</li>
+                <li>60</li>
+                <li>85</li>
+            </ul>
+        </div>
+        <div class="text-center">
+            <a href="/" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        // Example of dynamic population (replace with actual data via API or server-side rendering)
+        const playerData = {
+            name: "John Doe",
+            id: "T1001",
+            position: "Intermediate",
+            highestScore: 85,
+            previousScores: [50, 75, 60, 85],
+        };
+
+        // Populate player details dynamically
+        document.getElementById('playerName').textContent = playerData.name;
+        document.getElementById('playerId').textContent = playerData.id;
+        document.getElementById('position').textContent = playerData.position;
+        document.getElementById('highestScore').textContent = playerData.highestScore;
+
+        const scoreList = document.getElementById('previousScores');
+        scoreList.innerHTML = ""; // Clear existing list
+        playerData.previousScores.forEach(score => {
+            const li = document.createElement('li');
+            li.textContent = score;
+            scoreList.appendChild(li);
+        });
+    </script>
+</body>
+</html>

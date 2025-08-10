@@ -1,0 +1,347 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+    <h2>Student Performance Reports</h2>
+    
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="classSelect">Select Class</label>
+                <select class="form-control" id="classSelect">
+                    <option value="">Select a class</option>
+                    <!-- Classes will be populated dynamically -->
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="academicYear">Academic Year</label>
+                <input type="text" class="form-control" id="academicYear" placeholder="e.g., 2023-2024">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="termSelect">Term</label>
+                <select class="form-control" id="termSelect">
+                    <option value="">Select term</option>
+                    <option value="First Term">First Term</option>
+                    <option value="Second Term">Second Term</option>
+                    <option value="Final Term">Final Term</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="studentSelect">Select Student</label>
+                <select class="form-control" id="studentSelect">
+                    <option value="">Select a student</option>
+                    <!-- Students will be populated dynamically -->
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div id="performanceReport">
+                <!-- Performance report will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editReportModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Performance Report</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="reportForm">
+                        <h4>Academic Performance</h4>
+                        <div id="subjectsContainer">
+                            <!-- Subjects will be added dynamically -->
+                        </div>
+                        <button type="button" class="btn btn-secondary" id="addSubject">Add Subject</button>
+
+                        <h4 class="mt-4">Behavioral Performance</h4>
+                        <div class="form-group">
+                            <label for="attendance">Attendance (%)</label>
+                            <input type="number" class="form-control" id="attendance" min="0" max="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="punctuality">Punctuality (1-5)</label>
+                            <input type="number" class="form-control" id="punctuality" min="1" max="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="discipline">Discipline (1-5)</label>
+                            <input type="number" class="form-control" id="discipline" min="1" max="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="participation">Participation (1-5)</label>
+                            <input type="number" class="form-control" id="participation" min="1" max="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teamwork">Teamwork (1-5)</label>
+                            <input type="number" class="form-control" id="teamwork" min="1" max="5" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="teacherRemarks">Teacher Remarks</label>
+                            <textarea class="form-control" id="teacherRemarks" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveReport">Save Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const classSelect = document.getElementById('classSelect');
+    const studentSelect = document.getElementById('studentSelect');
+    const academicYear = document.getElementById('academicYear');
+    const termSelect = document.getElementById('termSelect');
+    const performanceReport = document.getElementById('performanceReport');
+    const subjectsContainer = document.getElementById('subjectsContainer');
+    const addSubjectBtn = document.getElementById('addSubject');
+    const saveReportBtn = document.getElementById('saveReport');
+
+    // Load classes
+    fetch('/api/classes')
+        .then(response => response.json())
+        .then(classes => {
+            classes.forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls._id;
+                option.textContent = cls.name;
+                classSelect.appendChild(option);
+            });
+        });
+
+    classSelect.addEventListener('change', loadStudents);
+    academicYear.addEventListener('change', loadReport);
+    termSelect.addEventListener('change', loadReport);
+    studentSelect.addEventListener('change', loadReport);
+
+    function loadStudents() {
+        if (!classSelect.value) return;
+        
+        fetch(`/api/students/class/${classSelect.value}`)
+            .then(response => response.json())
+            .then(students => {
+                studentSelect.innerHTML = '<option value="">Select a student</option>';
+                students.forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student._id;
+                    option.textContent = `${student.name} (${student.rollNumber})`;
+                    studentSelect.appendChild(option);
+                });
+            });
+    }
+
+    function loadReport() {
+        if (!studentSelect.value || !academicYear.value || !termSelect.value) return;
+
+        fetch(`/api/performance/student/${studentSelect.value}?academicYear=${academicYear.value}&term=${termSelect.value}`)
+            .then(response => response.json())
+            .then(report => {
+                if (report.length === 0) {
+                    performanceReport.innerHTML = '<p>No performance report found for this term.</p>';
+                    return;
+                }
+
+                const reportData = report[0];
+                performanceReport.innerHTML = `
+                    <h3>Performance Report</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Academic Performance</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Marks</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${reportData.academicPerformance.subjects.map(subject => `
+                                        <tr>
+                                            <td>${subject.subjectName}</td>
+                                            <td>${subject.marks}</td>
+                                            <td>${subject.grade}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total</th>
+                                        <th>${reportData.academicPerformance.totalMarks}</th>
+                                        <th>Average: ${reportData.academicPerformance.average}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Behavioral Performance</h4>
+                            <table class="table">
+                                <tr>
+                                    <th>Attendance</th>
+                                    <td>${reportData.behavioralPerformance.attendance}%</td>
+                                </tr>
+                                <tr>
+                                    <th>Punctuality</th>
+                                    <td>${reportData.behavioralPerformance.punctuality}/5</td>
+                                </tr>
+                                <tr>
+                                    <th>Discipline</th>
+                                    <td>${reportData.behavioralPerformance.discipline}/5</td>
+                                </tr>
+                                <tr>
+                                    <th>Participation</th>
+                                    <td>${reportData.behavioralPerformance.participation}/5</td>
+                                </tr>
+                                <tr>
+                                    <th>Teamwork</th>
+                                    <td>${reportData.behavioralPerformance.teamwork}/5</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h4>Teacher Remarks</h4>
+                            <p>${reportData.teacherRemarks || 'No remarks'}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Parent Remarks</h4>
+                            <p>${reportData.parentRemarks || 'No remarks'}</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mt-3" id="editReport">Edit Report</button>
+                `;
+
+                document.getElementById('editReport').addEventListener('click', () => {
+                    openEditModal(reportData);
+                });
+            });
+    }
+
+    function openEditModal(reportData) {
+        // Clear existing subjects
+        subjectsContainer.innerHTML = '';
+
+        // Add subjects
+        reportData.academicPerformance.subjects.forEach(subject => {
+            addSubjectRow(subject);
+        });
+
+        // Set behavioral performance values
+        document.getElementById('attendance').value = reportData.behavioralPerformance.attendance;
+        document.getElementById('punctuality').value = reportData.behavioralPerformance.punctuality;
+        document.getElementById('discipline').value = reportData.behavioralPerformance.discipline;
+        document.getElementById('participation').value = reportData.behavioralPerformance.participation;
+        document.getElementById('teamwork').value = reportData.behavioralPerformance.teamwork;
+
+        // Set remarks
+        document.getElementById('teacherRemarks').value = reportData.teacherRemarks || '';
+
+        $('#editReportModal').modal('show');
+    }
+
+    function addSubjectRow(subject = {}) {
+        const row = document.createElement('div');
+        row.className = 'row subject-row';
+        row.innerHTML = `
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Subject Name</label>
+                    <input type="text" class="form-control subject-name" value="${subject.subjectName || ''}" required>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Marks</label>
+                    <input type="number" class="form-control subject-marks" value="${subject.marks || ''}" required>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Grade</label>
+                    <input type="text" class="form-control subject-grade" value="${subject.grade || ''}" required>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button type="button" class="btn btn-danger btn-block remove-subject">Remove</button>
+                </div>
+            </div>
+        `;
+        subjectsContainer.appendChild(row);
+
+        row.querySelector('.remove-subject').addEventListener('click', () => {
+            row.remove();
+        });
+    }
+
+    addSubjectBtn.addEventListener('click', () => {
+        addSubjectRow();
+    });
+
+    saveReportBtn.addEventListener('click', function() {
+        const subjects = Array.from(subjectsContainer.querySelectorAll('.subject-row')).map(row => ({
+            subjectName: row.querySelector('.subject-name').value,
+            marks: parseInt(row.querySelector('.subject-marks').value),
+            grade: row.querySelector('.subject-grade').value
+        }));
+
+        const totalMarks = subjects.reduce((sum, subject) => sum + subject.marks, 0);
+        const average = totalMarks / subjects.length;
+
+        const reportData = {
+            studentId: studentSelect.value,
+            classId: classSelect.value,
+            academicYear: academicYear.value,
+            term: termSelect.value,
+            academicPerformance: {
+                subjects,
+                totalMarks,
+                average
+            },
+            behavioralPerformance: {
+                attendance: parseInt(document.getElementById('attendance').value),
+                punctuality: parseInt(document.getElementById('punctuality').value),
+                discipline: parseInt(document.getElementById('discipline').value),
+                participation: parseInt(document.getElementById('participation').value),
+                teamwork: parseInt(document.getElementById('teamwork').value)
+            },
+            teacherRemarks: document.getElementById('teacherRemarks').value
+        };
+
+        fetch('/api/performance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reportData)
+        })
+        .then(response => response.json())
+        .then(() => {
+            $('#editReportModal').modal('hide');
+            loadReport();
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+</script>
+
+<%- include('../partials/footer') %> 

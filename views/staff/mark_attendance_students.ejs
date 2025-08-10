@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Student Attendance</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <% if (message) { %>
+            <div class="alert alert-<%= message.type === 'success' ? 'success' : 'danger' %> alert-dismissible fade show" role="alert">
+                <%= message.text %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <% } %>
+
+        <h1 class="text-center mb-4">Mark Student Attendance</h1>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Date: <%= new Date(date).toLocaleDateString() %></h5>
+            </div>
+        </div>
+
+        <form action="/staff/attendance/students" method="POST" id="attendanceForm">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Roll No.</th>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Section</th>
+                            <th>Current Status</th>
+                            <th>Mark Attendance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (students && students.length > 0) { %>
+                            <% students.forEach(student => { %>
+                                <tr>
+                                    <td><%= student.rollNumber %></td>
+                                    <td><%= student.name %></td>
+                                    <td><%= student.class %></td>
+                                    <td><%= student.section %></td>
+                                    <td>
+                                        <span class="badge badge-<%= student.status === 'Present' ? 'success' : (student.status === 'Absent' ? 'danger' : 'secondary') %>">
+                                            <%= student.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <select name="attendance[<%= student._id %>]" class="form-control attendance-select" required>
+                                            <option value="">Select Status</option>
+                                            <option value="Present" <%= student.status === 'Present' ? 'selected' : '' %>>Present</option>
+                                            <option value="Absent" <%= student.status === 'Absent' ? 'selected' : '' %>>Absent</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="6" class="text-center">No students found for your assigned classes today.</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">Save Attendance</button>
+                <a href="/staff/dashboard" class="btn btn-secondary btn-lg ml-2">Back to Dashboard</a>
+            </div>
+        </form>
+
+        <script>
+            document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+                const selects = document.querySelectorAll('.attendance-select');
+                let hasSelection = false;
+                
+                selects.forEach(select => {
+                    if (select.value) {
+                        hasSelection = true;
+                    }
+                });
+
+                if (!hasSelection) {
+                    e.preventDefault();
+                    alert('Please mark attendance for at least one student.');
+                }
+            });
+        </script>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

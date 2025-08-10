@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View User - School Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .user-profile {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin: 0 auto 1rem;
+            overflow: hidden;
+        }
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-body {
+            padding: 2rem;
+        }
+        .info-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .info-section h4 {
+            color: #2a5298;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .info-item {
+            margin-bottom: 1rem;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+        .info-value {
+            color: #333;
+            font-size: 1.1rem;
+        }
+        .badge {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 20px;
+        }
+        .badge-admin {
+            background: #dc3545;
+            color: white;
+        }
+        .badge-staff {
+            background: #28a745;
+            color: white;
+        }
+        .badge-student {
+            background: #17a2b8;
+            color: white;
+        }
+        .action-buttons {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 10px;
+            margin: 0 0.5rem;
+        }
+        .btn-edit {
+            background: #2a5298;
+            color: white;
+        }
+        .btn-back {
+            background: #6c757d;
+            color: white;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="user-profile">
+        <div class="profile-header">
+            <div class="profile-image">
+                <img src="<%= user.image || '/images/default.jpg' %>" alt="Profile Picture">
+            </div>
+            <h2><%= user.name %></h2>
+            <span class="badge badge-<%= user.role %>"><%= user.role.toUpperCase() %></span>
+        </div>
+        
+        <div class="profile-body">
+            <div class="info-section">
+                <h4><i class="fas fa-user me-2"></i>Basic Information</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <div class="info-label">User ID</div>
+                            <div class="info-value"><%= user.uid %></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value"><%= user.email %></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Mobile Number</div>
+                            <div class="info-value"><%= user.mobileNumber %></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <div class="info-label">Age</div>
+                            <div class="info-value"><%= user.age %> years</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Gender</div>
+                            <div class="info-value"><%= user.sex.charAt(0).toUpperCase() + user.sex.slice(1) %></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Status</div>
+                            <div class="info-value">
+                                <span class="badge <%= user.active ? 'bg-success' : 'bg-danger' %>">
+                                    <%= user.active ? 'Active' : 'Inactive' %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% if (user.role === 'student') { %>
+            <div class="info-section">
+                <h4><i class="fas fa-graduation-cap me-2"></i>Student Information</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <div class="info-label">Class</div>
+                            <div class="info-value">Class <%= user.class %></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Section</div>
+                            <div class="info-value">Section <%= user.section %></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Roll Number</div>
+                            <div class="info-value"><%= user.rollNumber %></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <div class="info-label">Admission Number</div>
+                            <div class="info-value"><%= user.admissionNumber %></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Parent/Guardian Name</div>
+                            <div class="info-value"><%= user.parentName %></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Parent/Guardian Mobile</div>
+                            <div class="info-value"><%= user.parentMobile %></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Address</div>
+                    <div class="info-value"><%= user.address %></div>
+                </div>
+            </div>
+            <% } %>
+
+            <div class="info-section">
+                <h4><i class="fas fa-clock me-2"></i>Account Information</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <div class="info-label">Created At</div>
+                            <div class="info-value"><%= new Date(user.createdAt).toLocaleString() %></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <div class="info-label">Last Updated</div>
+                            <div class="info-value"><%= new Date(user.updatedAt).toLocaleString() %></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="/admins/users/<%= user._id %>/edit" class="btn btn-edit">
+                    <i class="fas fa-edit me-2"></i>Edit User
+                </a>
+                <a href="/admins/users" class="btn btn-back">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Users
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

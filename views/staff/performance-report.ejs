@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Performance Report</h1>
+        <form action="/staff/performance-report/save" method="POST">
+            <div class="form-group">
+                <label for="studentUid">Select Student:</label>
+                <select class="form-control" id="studentUid" name="studentUid" required>
+                    <% availableStudents.forEach(student => { %>
+                        <option value="<%= student.uid %>"><%= student.name %> (<%= student.uid %>)</option>
+                    <% }) %>
+                </select>
+            </div>
+            <% for (let i = 0; i < 10; i++) { %>
+                <div class="form-group">
+                    <label for="performanceScores<%= i %>">Performance Score <%= i + 1 %>:</label>
+                    <input type="number" class="form-control" id="performanceScores<%= i %>" name="performanceScores[]" min="0" max="10" required>
+                </div>
+            <% } %>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

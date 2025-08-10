@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="bg-primary text-white p-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>Student Dashboard</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item"><a class="nav-link text-white" href="/students/dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/students/attendance-records">Attendance Records</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/logout">Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mt-5">
+        <h1 class="text-center">Attendance Records</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% student.attendance.forEach(record => { %>
+                    <tr>
+                        <td><%= record.date %></td>
+                        <td><%= record.status %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <div class="text-center">
+            <a href="/students/dashboard" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+    </main>
+
+    <footer class="bg-light text-center py-3">
+        <p>&copy; 2024 Your Company</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

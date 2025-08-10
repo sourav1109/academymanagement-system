@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Announcements</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="bg-primary text-white p-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>Manage Announcements</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item"><a class="nav-link text-white" href="/admins/dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/admins/manage-users">Manage Users</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/admins/announcements">Announcements</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/admins/tournaments">Tournaments</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/logout">Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mt-5">
+        <section class="text-center">
+            <h2>Post Announcement</h2>
+            <form id="announcementForm">
+                <div class="form-group">
+                    <input type="text" name="title" class="form-control" placeholder="Title" required>
+                </div>
+                <div class="form-group">
+                    <textarea name="content" class="form-control" placeholder="Content" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Announcement</button>
+            </form>
+            <div id="alertBox"></div> <!-- Container for success/error messages -->
+        </section>
+
+        <section class="mt-4">
+            <h2>All Announcements</h2>
+            <ul class="list-unstyled" id="announcementList">
+                <% announcements.forEach(announcement => { %>
+                    <li class="media my-4" id="announcement-<%= announcement._id %>">
+                        <div class="media-body">
+                            <h6><%= announcement.title %></h6>
+                            <p><%= announcement.content %></p>
+                            <% if (announcement.createdBy) { %>
+                                <small>Posted by: <%= announcement.createdBy.name %> (UID: <%= announcement.createdBy.uid %>) on <%= announcement.date.toDateString() %></small>
+                            <% } else { %>
+                                <small>Posted on <%= announcement.date.toDateString() %></small>
+                            <% } %>
+                            <form action="/admins/announcements/<%= announcement._id %>/delete" method="POST" style="display:inline;" onsubmit="return confirmDelete(event);">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </li>
+                <% }) %>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="bg-light text-center py-3">
+        <p>&copy; 2024 Your Company</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Confirmation Alert Box Script -->
+    <script>
+        function confirmDelete(event) {
+            const confirmed = confirm("Are you sure you want to delete this announcement?");
+            if (!confirmed) {
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+    <!-- Announcement Creation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('#announcementForm');
+            const alertBox = document.querySelector('#alertBox');
+            const announcementsList = document.querySelector('#announcementList');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault(); // Prevent default form submission
+
+                const title = form.querySelector('input[name="title"]').value;
+                const content = form.querySelector('textarea[name="content"]').value;
+
+                try {
+                    const response = await fetch('/admins/announcements', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ title, content }),
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        // Display success message
+                        alertBox.innerHTML = `<div class="alert alert-success">Announcement created successfully!</div>`;
+                        form.reset();
+
+                        // Dynamically add the new announcement to the list
+                        const newAnnouncement = document.createElement('li');
+                        newAnnouncement.classList.add('media', 'my-4');
+                        newAnnouncement.id = `announcement-${result._id}`;
+                        newAnnouncement.innerHTML = `
+                            <div class="media-body">
+                                <h6>${result.title}</h6>
+                                <p>${result.content}</p>
+                                <small>Posted on ${new Date(result.date).toDateString()}</small>
+                                <form action="/admins/announcements/${result._id}/delete" method="POST" style="display:inline;" onsubmit="return confirmDelete(event);">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </div>`;
+                        announcementsList.prepend(newAnnouncement); // Add to the top of the list
+                    } else {
+                        alertBox.innerHTML = `<div class="alert alert-danger">${result.message || 'Error creating announcement'}</div>`;
+                    }
+                } catch (error) {
+                    alertBox.innerHTML = `<div class="alert alert-danger">Failed to create announcement. Please try again.</div>`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

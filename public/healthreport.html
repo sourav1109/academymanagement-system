@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis Academy Health Report Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        .form-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-header text-center">
+            <h2>Tennis Academy Health Report</h2>
+        </div>
+        <form action="/healthreport" method="POST" class="mt-4">
+            <!-- Player Registration Number -->
+            <div class="mb-3">
+                <label for="playerId" class="form-label">Player Registration Number</label>
+                <select class="form-select" id="playerId" name="playerId" required>
+                    <option value="" disabled selected>Select Player Registration Number</option>
+                    <option value="T1001">T1001</option>
+                    <option value="T1002">T1002</option>
+                    <option value="T1003">T1003</option>
+                    <option value="T1004">T1004</option>
+                    <option value="T1005">T1005</option>
+                </select>
+            </div>
+
+            <!-- Health Issue -->
+            <div class="mb-3">
+                <label for="healthIssue" class="form-label">Health Issue</label>
+                <input type="text" class="form-control" id="healthIssue" name="healthIssue" placeholder="E.g., Tennis elbow, muscle strain" required>
+            </div>
+
+            <!-- Injury Details -->
+            <div class="mb-3">
+                <label for="injuryDetails" class="form-label">Injury Details (if any)</label>
+                <textarea class="form-control" id="injuryDetails" name="injuryDetails" rows="4" placeholder="Describe any injuries or discomfort experienced during training"></textarea>
+            </div>
+
+            <!-- Last Training Session -->
+            <div class="mb-3">
+                <label for="lastSessionDate" class="form-label">Last Training Session Date</label>
+                <input type="date" class="form-control" id="lastSessionDate" name="lastSessionDate" required>
+            </div>
+
+            <!-- Coach Assigned -->
+            <div class="mb-3">
+                <label for="coachName" class="form-label">Coach Assigned</label>
+                <select class="form-select" id="coachName" name="coachName" required>
+                    <option value="" disabled selected>Select Coach</option>
+                    <option value="John Doe">John Doe</option>
+                    <option value="Jane Smith">Jane Smith</option>
+                    <option value="Mike Johnson">Mike Johnson</option>
+                </select>
+            </div>
+
+            <!-- Improvement Status -->
+            <div class="mb-3">
+                <label for="improvementStatus" class="form-label">Health Improvement Status</label>
+                <select class="form-select" id="improvementStatus" name="improvementStatus" required>
+                    <option value="" disabled selected>Select Improvement Status</option>
+                    <option value="Improving">Improving</option>
+                    <option value="No Change">No Change</option>
+                    <option value="Deteriorating">Deteriorating</option>
+                </select>
+            </div>
+
+            <!-- Recovery Advice -->
+            <div class="mb-3">
+                <label for="recoveryAdvice" class="form-label">Recovery Advice</label>
+                <textarea class="form-control" id="recoveryAdvice" name="recoveryAdvice" rows="3" placeholder="Enter any recovery or therapy recommendations"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit Report</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Example of dynamically populating registration numbers (for a real case, use backend logic)
+        const playerDropdown = document.getElementById('playerId');
+        const playerIds = ['T1006', 'T1007', 'T1008', 'T1009', 'T1010'];
+
+        playerIds.forEach(id => {
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = id;
+            playerDropdown.appendChild(option);
+        });
+    </script>
+</body>
+</html>

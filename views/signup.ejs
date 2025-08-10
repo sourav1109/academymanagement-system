@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - School Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .signup-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .signup-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .signup-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        .signup-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        .signup-body {
+            padding: 2rem;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #2a5298;
+            margin-bottom: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e1e1e1;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #2a5298;
+            box-shadow: 0 0 0 0.2rem rgba(42, 82, 152, 0.25);
+        }
+        .form-control::placeholder {
+            color: #999;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 82, 152, 0.3);
+        }
+        .student-fields {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 1rem;
+            border: 2px dashed #2a5298;
+        }
+        .student-fields h4 {
+            color: #2a5298;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        .password-requirements {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        .password-strength {
+            height: 5px;
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .form-check {
+            margin: 1rem 0;
+        }
+        .form-check-input:checked {
+            background-color: #2a5298;
+            border-color: #2a5298;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 2rem;
+            color: #666;
+        }
+        .login-link a {
+            color: #2a5298;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        .alert {
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .profile-picture-upload {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #2a5298;
+            cursor: pointer;
+        }
+        .profile-picture-upload img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-picture-upload .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0.5rem;
+            color: white;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        #image {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-header">
+            <h1><i class="fas fa-user-plus me-2"></i>Create Account</h1>
+            <p>Join our school management system today</p>
+        </div>
+        <div class="signup-body">
+            <form action="/signup" method="POST" enctype="multipart/form-data" id="signupForm">
+                <div class="profile-picture-upload" onclick="document.getElementById('image').click()">
+                    <img src="/images/default.jpg" id="preview" alt="Profile Picture">
+                    <div class="overlay">
+                        <i class="fas fa-camera"></i> Upload Photo
+                    </div>
+                </div>
+                <input type="file" id="image" name="image" accept="image/*" required onchange="previewImage(this)">
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="age" class="form-label">Age</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-birthday-cake"></i></span>
+                            <input type="number" class="form-control" id="age" name="age" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="sex" class="form-label">Gender</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+                            <select class="form-select" id="sex" name="sex" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="role" class="form-label">Role</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                            <select class="form-select" id="role" name="role" required onchange="toggleFields()">
+                                <option value="">Select Role</option>
+                                <option value="student">Student</option>
+                                <option value="staff">Staff</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="mobileNumber" class="form-label">Mobile Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            <input type="tel" class="form-control" id="mobileNumber" name="mobileNumber" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staff specific fields -->
+                <div id="staffFields" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <select class="form-control" id="subject" name="subject">
+                                    <option value="">Select Subject</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                    <option value="Science">Science</option>
+                                    <option value="English">English</option>
+                                    <option value="History">History</option>
+                                    <option value="Geography">Geography</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Physical Education">Physical Education</option>
+                                    <option value="Art">Art</option>
+                                    <option value="Music">Music</option>
+                                    <option value="Languages">Languages</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="staffAddress">Address</label>
+                                <textarea class="form-control" id="staffAddress" name="address" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student-specific fields -->
+                <div id="studentFields" class="student-fields" style="display: none;">
+                    <h4><i class="fas fa-graduation-cap me-2"></i>Student Information</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="parentName" class="form-label">Parent/Guardian Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-friends"></i></span>
+                                <input type="text" class="form-control" id="parentName" name="parentName">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="parentMobile" class="form-label">Parent/Guardian Mobile</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                <input type="tel" class="form-control" id="parentMobile" name="parentMobile">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="class" class="form-label">Class</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-chalkboard"></i></span>
+                                <select class="form-select" id="class" name="class">
+                                    <option value="">Select Class</option>
+                                    <% for(let i = 1; i <= 12; i++) { %>
+                                        <option value="<%= i %>">Class <%= i %></option>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="section" class="form-label">Section</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-layer-group"></i></span>
+                                <select class="form-select" id="section" name="section">
+                                    <option value="">Select Section</option>
+                                    <% ['A', 'B', 'C', 'D', 'E'].forEach(section => { %>
+                                        <option value="<%= section %>">Section <%= section %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="rollNumber" class="form-label">Roll Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+                                <input type="text" class="form-control" id="rollNumber" name="rollNumber">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="admissionNumber" class="form-label">Admission Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                <input type="text" class="form-control" id="admissionNumber" name="admissionNumber">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                            <textarea class="form-control" id="address" name="address" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="password-strength" id="passwordStrength"></div>
+                        <div class="password-requirements">
+                            Password must be at least 8 characters long and include uppercase, lowercase, numbers, and special characters.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                        <div class="text-danger mt-1" id="passwordMatch" style="display: none;">Passwords do not match</div>
+                    </div>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="terms" required>
+                    <label class="form-check-label" for="terms">
+                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </button>
+                </div>
+            </form>
+            <div class="login-link">
+                Already have an account? <a href="/login">Sign in</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const passwordStrength = document.getElementById('passwordStrength');
+            const passwordMatch = document.getElementById('passwordMatch');
+
+            passwordInput.addEventListener('input', updatePasswordStrength);
+            confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+            function updatePasswordStrength() {
+                const password = passwordInput.value;
+                const strength = calculatePasswordStrength(password);
+                updateStrengthBar(strength);
+            }
+
+            function calculatePasswordStrength(password) {
+                let strength = 0;
+                if (password.length >= 8) strength += 1;
+                if (/[A-Z]/.test(password)) strength += 1;
+                if (/[0-9]/.test(password)) strength += 1;
+                if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+                return strength;
+            }
+
+            function updateStrengthBar(strength) {
+                passwordStrength.style.width = `${strength * 25}%`;
+                switch (strength) {
+                    case 0:
+                    case 1:
+                        passwordStrength.style.backgroundColor = '#ff4444';
+                        break;
+                    case 2:
+                        passwordStrength.style.backgroundColor = '#ffbb33';
+                        break;
+                    case 3:
+                        passwordStrength.style.backgroundColor = '#00C851';
+                        break;
+                    case 4:
+                        passwordStrength.style.backgroundColor = '#007E33';
+                        break;
+                    default:
+                        passwordStrength.style.backgroundColor = 'transparent';
+                }
+            }
+
+            function checkPasswordMatch() {
+                if (passwordInput.value === confirmPasswordInput.value) {
+                    passwordMatch.style.display = 'none';
+                } else {
+                    passwordMatch.style.display = 'block';
+                }
+            }
+
+            const form = document.getElementById('signupForm');
+            form.addEventListener('submit', (event) => {
+                if (passwordInput.value !== confirmPasswordInput.value) {
+                    event.preventDefault();
+                    passwordMatch.style.display = 'block';
+                }
+            });
+        });
+
+        function toggleFields() {
+            const role = document.getElementById('role').value;
+            const studentFields = document.getElementById('studentFields');
+            const staffFields = document.getElementById('staffFields');
+            
+            if (role === 'student') {
+                studentFields.style.display = 'block';
+                staffFields.style.display = 'none';
+                // Make student fields required
+                document.querySelectorAll('#studentFields input, #studentFields select').forEach(element => {
+                    element.required = true;
+                });
+                // Make staff fields not required
+                document.querySelectorAll('#staffFields input, #staffFields select').forEach(element => {
+                    element.required = false;
+                });
+            } else if (role === 'staff') {
+                studentFields.style.display = 'none';
+                staffFields.style.display = 'block';
+                // Make staff fields required
+                document.querySelectorAll('#staffFields input, #staffFields select').forEach(element => {
+                    element.required = true;
+                });
+                // Make student fields not required
+                document.querySelectorAll('#studentFields input, #studentFields select').forEach(element => {
+                    element.required = false;
+                });
+            } else {
+                studentFields.style.display = 'none';
+                staffFields.style.display = 'none';
+                // Make all fields not required
+                document.querySelectorAll('#studentFields input, #studentFields select, #staffFields input, #staffFields select').forEach(element => {
+                    element.required = false;
+                });
+            }
+        }
+
+        // Call toggleFields on page load to set initial state
+        document.addEventListener('DOMContentLoaded', toggleFields);
+    </script>
+</body>
+</html>

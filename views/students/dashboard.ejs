@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/dashboard.css"> <!-- Custom styles -->
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            height: 100vh;
+            background: linear-gradient(to bottom, #9e57e0,rgb(16, 106, 179), #bf2052);
+            color: white;
+            
+        }
+        .sidebar .nav-link {
+            color: white;
+            margin-top:30px ;
+        }
+        .sidebar .nav-link.active {
+            background-color: #0056b3;
+        }
+        .content {
+            padding: 20px;
+        }
+        .profile {
+            display: flex;
+            align-items: center;
+        }
+        .profile img {
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
+        }
+        .profile-info {
+            margin-left: 10px;
+        }
+        .card {
+            border-radius: 15px;
+            height: 100%;
+        }
+        .card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #fff;
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            border-radius: 50%;
+        }
+        .progress-icon { background-color: #6c63ff; }
+        .announcements-icon { background-color: #f4a261; }
+        .statistics-icon { background-color: #2a9d8f; }
+        .timetable-icon { background-color: #e76f51; }
+        .attendance-icon { background-color: #264653; }
+        .tournaments-icon { background-color: #1d3557; }
+        .card-title {
+            font-weight: bold;
+        }
+        .card-text {
+            font-size: 0.9rem;
+        }
+        a:hover {
+    text-decoration: none;
+    color: #0056b3; /* Change to the desired hover color */
+    transition: color 0.3s ease; /* Smooth transition effect */
+}
+
+.card:hover {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
+    transform: scale(1.05); /* Slightly increase the card size */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth animation */
+}
+
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/students/dashboard">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="/students/tennis-rules">
+                                <i class="fas fa-book"></i> Tennis Rules
+                            </a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/news_events">
+                                <i class="fas fa-newspaper"></i> Latest News and Updates
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/students/best-results">
+                                <i class="fas fa-trophy"></i> Our Best Results
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/students/chat-coaches">
+                                <i class="fas fa-comments"></i> Chat with Your Coaches
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="/view-profile">
+                                <i class="fas fa-user"></i> View Profile
+                            </a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 content">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Student Dashboard</h1>
+                    <div class="profile">
+                        <img src="<%= user.image %>" alt="Profile Picture">
+                        <div class="profile-info text-right">
+                            <p class="mb-0"><%= user.name %></p>
+                            <p class="mb-0">UID: <%= user.uid %></p>
+                            
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4"><a href="/health" style="text-decoration: none;color: black;">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <span class="icon progress-icon"><i class="fas fa-chart-line"></i></span>
+                                <h5 class="card-title">Weekly Progress Reports</h5>
+                                <p class="card-text">Track your weekly progress with detailed reports and graphs.</p>
+                            </div>
+                        </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4"><a href="/students/announcements" style="text-decoration: none;color: black;">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <span class="icon announcements-icon"><i class="fas fa-bullhorn"></i></span>
+                                <h5 class="card-title">Announcements</h5>
+                                <p class="card-text">Stay updated with the latest announcements and news.</p>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+                    <!-- <div class="col-md-6 mb-4">
+                        <a href="/performance" style="text-decoration: none; color: black;">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    
+                                    <span class="icon statistics-icon" style="font-size: 2rem; color: #007bff;">
+                                        <i class="fas fa-dumbbell"></i>
+                                    </span>
+                                    
+                                    <h5 class="card-title mt-3">Physical Statistical Reports</h5>
+                                    
+                                    <p class="card-text">View detailed reports of your physical statistics.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div> -->
+                    
+                    <div class="col-md-6 mb-4"><a href="/public/1736093230627-Combinatorics _ DPP 05 Discussion Notes.pdf" target="_blank" style="text-decoration: none;color: black;">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <span class="icon timetable-icon"><i class="fas fa-calendar-alt"></i></span>
+                                <h5 class="card-title">View Timetable</h5>
+                                <p class="card-text">Check your training schedule and upcoming events.</p>
+                            </div>
+                        </div></a>
+                    </div>
+                    <div class="col-md-6 mb-4"><a href="/students/attendance-records" style="text-decoration: none;color: black;">  
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <span class="icon attendance-icon"><i class="fas fa-user-check"></i></span>
+                                <h5 class="card-title">View Attendance</h5>
+                                <p class="card-text">Review your attendance records and history.</p>
+                            </div>
+                        </div></a>
+                    </div>
+                    <div class="col-md-6 mb-4"><a href="/"style="text-decoration: none;color: black;">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <span class="icon tournaments-icon"><i class="fas fa-trophy"></i></span>
+                                <h5 class="card-title">Upcoming Tournaments</h5>
+                                <p class="card-text">Enroll in upcoming tournaments directly from the homepage.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rectification Status</title>
+    <style>body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+    }
+    
+    h1 {
+        color: #333;
+        text-align: center;
+    }
+    
+    ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    li {
+        background: #fff;
+        margin: 10px;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 300px; /* Fixed width for card */
+        transition: transform 0.2s;
+    }
+    
+    li:hover {
+        transform: scale(1.05); /* Slightly enlarge on hover */
+    }
+    
+    strong {
+        color: #555;
+    }
+    
+    button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px; /* Space above button */
+    }
+    
+    button:hover {
+        background-color: #218838;
+    }
+    
+    </style>
+</head>
+<body>
+    <h1>Rectification Request Status</h1>
+    <ul>
+        <% requests.forEach(request => { %>
+            <li>
+                <strong>Date:</strong> <%= new Date(request.date).toDateString() %><br> <!-- Ensure date is a Date object -->
+                <strong>Reason:</strong> <%= request.reason %><br>
+                <strong>Status:</strong> <%= request.status %><br>
+                <% if (request.status === 'approved') { %>
+                    <form action="/staff/attendance-rectification/<%= request._id %>/update" method="GET">
+                        <button type="submit">Update Attendance</button>
+                    </form>
+                <% } %>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>

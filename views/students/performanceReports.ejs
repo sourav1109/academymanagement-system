@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+        }
+        .report-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+        }
+        h2 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+        .comparison {
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="report-container">
+            <h2>Performance Report for <%= student.name %></h2>
+            <div class="chart-container">
+                <canvas id="barChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="pieChart"></canvas>
+            </div>
+            <div class="comparison">
+                <p>Current Score: <%= performanceData.reduce((a, b) => a + b.score, 0) / performanceData.length %></p>
+                <p>Best Friend Score: <%= bestFriendScore %></p>
+                <p>Difference: <%= (bestFriendScore - (performanceData.reduce((a, b) => a + b.score, 0) / performanceData.length)).toFixed(2) %></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data =  JSON.stringify(performanceData) ;
+
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: data.map(record => record.date),
+                datasets: [{
+                    label: 'Performance Score',
+                    data: data.map(record => record.score),
+                    backgroundColor: '#6a00f4',
+                    borderColor: '#3a0088',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: data.map(record => record.date),
+                datasets: [{
+                    label: 'Performance Distribution',
+                    data: data.map(record => record.score),
+                    backgroundColor: ['#6a00f4', '#3a0088', '#1d1d1d', '#787878', '#c3c3c3'],
+                    borderColor: '#ffffff',
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
+</body>
+</html>

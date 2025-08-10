@@ -1,0 +1,36 @@
+# Ignore all mp4 videos
+*.mp4
+
+# Ignore other common large media files
+*.avi
+*.mov
+*.mkv
+*.wmv
+
+# Ignore generated files
+*.log
+*.tmp
+*.bak
+
+# Ignore OS-specific files
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Ignore IDE/editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Ignore node modules (if using Node.js)
+node_modules/
+
+# Ignore build and dist folders
+dist/
+build/

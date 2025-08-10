@@ -1,0 +1,300 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Class Timetable Management</h4>
+                </div>
+                <div class="card-body">
+                    <form id="timetableForm" class="mb-4">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="classSelect">Class</label>
+                                    <select class="form-control" id="classSelect" required>
+                                        <option value="">Select Class</option>
+                                        <% for(let i = 1; i <= 12; i++) { %>
+                                            <option value="<%= i %>">Class <%= i %></option>
+                                        <% } %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="sectionSelect">Section</label>
+                                    <select class="form-control" id="sectionSelect" required>
+                                        <option value="">Select Section</option>
+                                        <% ['A', 'B', 'C', 'D', 'E'].forEach(section => { %>
+                                            <option value="<%= section %>">Section <%= section %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="academicYear">Academic Year</label>
+                                    <select class="form-control" id="academicYear" required>
+                                        <% const currentYear = new Date().getFullYear(); %>
+                                        <% for(let i = 0; i < 3; i++) { %>
+                                            <option value="<%= currentYear - i %>"><%= currentYear - i %></option>
+                                        <% } %>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Period 1</th>
+                                    <th>Period 2</th>
+                                    <th>Period 3</th>
+                                    <th>Period 4</th>
+                                    <th>Period 5</th>
+                                    <th>Period 6</th>
+                                    <th>Period 7</th>
+                                    <th>Period 8</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timetableBody">
+                                <% ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].forEach(day => { %>
+                                    <tr>
+                                        <td class="font-weight-bold"><%= day %></td>
+                                        <% for(let i = 1; i <= 8; i++) { %>
+                                            <td class="period-cell" data-day="<%= day %>" data-period="<%= i %>">
+                                                <div class="period-content">
+                                                    <span class="subject"></span>
+                                                    <span class="teacher"></span>
+                                                    <div class="period-actions">
+                                                        <button class="btn btn-sm btn-primary edit-period" onclick="editPeriod('<%= day %>', <%= i %>)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger delete-period" onclick="deletePeriod('<%= day %>', <%= i %>)">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        <% } %>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Period Modal -->
+<div class="modal fade" id="periodModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add/Edit Period</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="periodForm">
+                    <input type="hidden" id="editDay">
+                    <input type="hidden" id="editPeriod">
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" class="form-control" id="subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="teacher">Teacher</label>
+                        <select class="form-control" id="teacher" required>
+                            <option value="">Select Teacher</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="startTime">Start Time</label>
+                                <input type="time" class="form-control" id="startTime" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="endTime">End Time</label>
+                                <input type="time" class="form-control" id="endTime" required>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="savePeriod()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.period-cell {
+    min-width: 150px;
+    height: 100px;
+    vertical-align: middle;
+    position: relative;
+}
+.period-content {
+    padding: 5px;
+}
+.period-actions {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: none;
+}
+.period-cell:hover .period-actions {
+    display: block;
+}
+.subject {
+    font-weight: bold;
+    display: block;
+}
+.teacher {
+    font-size: 0.9em;
+    color: #666;
+    display: block;
+}
+</style>
+
+<script>
+let teachers = [];
+
+// Load teachers when page loads
+async function loadTeachers() {
+    try {
+        const response = await fetch('/api/users/teachers');
+        teachers = await response.json();
+        const teacherSelect = document.getElementById('teacher');
+        teacherSelect.innerHTML = '<option value="">Select Teacher</option>';
+        teachers.forEach(teacher => {
+            teacherSelect.innerHTML += `<option value="${teacher._id}">${teacher.name}</option>`;
+        });
+    } catch (error) {
+        console.error('Error loading teachers:', error);
+    }
+}
+
+// Load timetable when class and section are selected
+async function loadTimetable() {
+    const classId = document.getElementById('classSelect').value;
+    const section = document.getElementById('sectionSelect').value;
+    const academicYear = document.getElementById('academicYear').value;
+
+    if (!classId || !section) return;
+
+    try {
+        const response = await fetch(`/api/timetable/class/${classId}-${section}?academicYear=${academicYear}`);
+        const timetable = await response.json();
+        updateTimetableDisplay(timetable);
+    } catch (error) {
+        console.error('Error loading timetable:', error);
+    }
+}
+
+// Update timetable display
+function updateTimetableDisplay(timetable) {
+    const cells = document.querySelectorAll('.period-cell');
+    cells.forEach(cell => {
+        const day = cell.dataset.day;
+        const period = parseInt(cell.dataset.period);
+        const dayData = timetable.days.find(d => d.day === day);
+        const periodData = dayData ? dayData.periods.find(p => p.periodNumber === period) : null;
+
+        const subjectSpan = cell.querySelector('.subject');
+        const teacherSpan = cell.querySelector('.teacher');
+
+        if (periodData) {
+            subjectSpan.textContent = periodData.subject;
+            teacherSpan.textContent = periodData.teacher.name;
+        } else {
+            subjectSpan.textContent = '';
+            teacherSpan.textContent = '';
+        }
+    });
+}
+
+// Edit period
+function editPeriod(day, period) {
+    document.getElementById('editDay').value = day;
+    document.getElementById('editPeriod').value = period;
+    $('#periodModal').modal('show');
+}
+
+// Delete period
+async function deletePeriod(day, period) {
+    if (!confirm('Are you sure you want to delete this period?')) return;
+
+    const classId = document.getElementById('classSelect').value;
+    const section = document.getElementById('sectionSelect').value;
+    const academicYear = document.getElementById('academicYear').value;
+
+    try {
+        await fetch(`/api/timetable/${period}?classId=${classId}-${section}&day=${day}&periodNumber=${period}&academicYear=${academicYear}`, {
+            method: 'DELETE'
+        });
+        loadTimetable();
+    } catch (error) {
+        console.error('Error deleting period:', error);
+    }
+}
+
+// Save period
+async function savePeriod() {
+    const classId = document.getElementById('classSelect').value;
+    const section = document.getElementById('sectionSelect').value;
+    const academicYear = document.getElementById('academicYear').value;
+    const day = document.getElementById('editDay').value;
+    const periodNumber = parseInt(document.getElementById('editPeriod').value);
+    const subject = document.getElementById('subject').value;
+    const teacherId = document.getElementById('teacher').value;
+    const startTime = document.getElementById('startTime').value;
+    const endTime = document.getElementById('endTime').value;
+
+    try {
+        await fetch('/api/timetable', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                classId: `${classId}-${section}`,
+                day,
+                periodNumber,
+                subject,
+                teacherId,
+                startTime,
+                endTime,
+                academicYear
+            })
+        });
+        $('#periodModal').modal('hide');
+        loadTimetable();
+    } catch (error) {
+        console.error('Error saving period:', error);
+    }
+}
+
+// Event listeners
+document.getElementById('classSelect').addEventListener('change', loadTimetable);
+document.getElementById('sectionSelect').addEventListener('change', loadTimetable);
+document.getElementById('academicYear').addEventListener('change', loadTimetable);
+
+// Load teachers when page loads
+loadTeachers();
+</script>
+
+<%- include('../partials/footer') %> 

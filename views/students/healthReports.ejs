@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Health Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+        }
+        .report-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+        }
+        h2 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="report-container">
+            <h2>Health Report for <%= student.name %></h2>
+            <div class="chart-container">
+                <canvas id="barChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = JSON.stringify(healthData);
+
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: data.map(record => record.date),
+                datasets: [{
+                    label: 'Health Score',
+                    data: data.map(record => record.value),
+                    backgroundColor: '#f46a00',
+                    borderColor: '#d63a00',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: data.map(record => record.date),
+                datasets: [{
+                    label: 'Health Distribution',
+                    data: data.map(record => record.value),
+                    backgroundColor: ['#f46a00', '#d63a00', '#a63a00', '#823a00', '#613a00'],
+                    borderColor: '#ffffff',
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Attendance</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="bg-primary text-white p-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>Staff Dashboard</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item"><a class="nav-link text-white" href="/staff/dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/staff/attendance">Mark Attendance</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/staff/attendance-records">Attendance Records</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/staff/attendance-rectification">Submit Attendance Rectification</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/staff/attendance-rectification/status">Rectification Status</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="/logout">Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mt-5">
+        <h1 class="text-center">Update Attendance for <%= new Date(date).toDateString() %></h1>
+        <% if (!rectificationRequest.attendanceUpdated) { %>
+            <form action="/staff/attendance-rectification/<%= requestId %>/save" method="POST">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>UID</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% students.forEach(student => { %>
+                            <tr>
+                                <td><%= student.name %></td>
+                                <td><%= student.uid %></td>
+                                <td>
+                                    <select name="attendance[<%= student._id %>]">
+                                        <option value="Present" <%= student.currentStatus === 'Present' ? 'selected' : '' %>>Present</option>
+                                        <option value="Absent" <%= student.currentStatus === 'Absent' ? 'selected' : '' %>>Absent</option>
+                                        <option value="Not Marked" <%= student.currentStatus === 'Not Marked' ? 'selected' : '' %>>Not Marked</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary">Update Attendance</button>
+            </form>
+        <% } else { %>
+            <p class="text-center text-success">Attendance has already been updated for this date.</p>
+        <% } %>
+    </main>
+
+    <footer class="bg-light text-center py-3">
+        <p>&copy; 2024 Your Company</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

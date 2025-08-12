@@ -8,7 +8,7 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

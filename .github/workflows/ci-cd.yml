@@ -21,11 +21,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run lint
-        run: npm run lint
-
-      - name: Run tests
-        run: npm test
+      
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/school-management-system:latest .

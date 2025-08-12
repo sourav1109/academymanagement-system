@@ -1,29 +1,38 @@
-﻿require('dotenv').config();
+﻿import dotenv from 'dotenv';
+dotenv.config();
 
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const bcrypt = require('bcryptjs');
-const session = require('express-session');
-const multer = require('multer');
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
-const User = require('./models/User');
-const Announcement = require('./models/announcement');
-const Tournament = require('./models/tournament');
-const cron = require('node-cron');
-const path = require('path');
-const Attendance = require('./models/attendence');
-const RectificationRequest = require('./models/RectificationRequest');
-const PerformanceReport = require('./models/PerformenceReport');
-const HealthReport = require('./models/HealthReport');
-const News = require('./models/news');
-const passport = require('passport');
-const Timetable = require('./models/Timetable');
-const Class = require('./models/class');
+import express from 'express';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
+import bcrypt from 'bcryptjs';
+import session from 'express-session';
+import multer from 'multer';
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
 
-// Import staff assignment routes
-const staffAssignmentRoutes = require('./routes/staffAssignment');
+// Fix __dirname in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Setup require to load CommonJS modules
+const require = createRequire(import.meta.url);
+
+// Import CommonJS modules (models & routes)
+const User = require('./models/User.js');
+const Announcement = require('./models/announcement.js');
+const Tournament = require('./models/tournament.js');
+const Attendance = require('./models/attendence.js');
+const RectificationRequest = require('./models/RectificationRequest.js');
+const PerformanceReport = require('./models/PerformenceReport.js');
+const News = require('./models/news.js');
+const Timetable = require('./models/Timetable.js');
+const Class = require('./models/class.js');
+const StaffAssignment = require('./models/StaffAssignment.js');
+
+const staffAssignmentRoutes = require('./routes/staffAssignment.js');
 
 // Setup multer for file uploads
 const upload = multer({ dest: 'public/images/' });
@@ -34,44 +43,48 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 // Connect to MongoDB
 const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) {
-    console.error('MONGODB_URI is not defined in environment variables');
-    console.error('Please create a .env file and add: MONGODB_URI=mongodb+srv://sourav11092002:6mU9yE9PzzdxUgcl@cluster0.dinkvg7.mongodb.net/school_management_system');
-    process.exit(1);
+  console.error('MONGODB_URI is not defined in environment variables');
+  process.exit(1);
 }
 
 mongoose.connect(MONGODB_URI)
-    .then(() => {
-        console.log('Connected to MongoDB');
-        createAdminIfNotExists();
-    })
-    .catch(err => {
-        console.error('Error connecting to MongoDB:', err);
-    });
+  .then(() => {
+    console.log('Connected to MongoDB');
+    createAdminIfNotExists();
+  })
+  .catch(err => {
+    console.error('Error connecting to MongoDB:', err);
+  });
 
-// Middleware
+// Your middleware and routes setup here...
+// For example:
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session({ 
-    secret: process.env.SESSION_SECRET || 'dev_secret', 
-    resave: false, 
-    saveUninitialized: true 
+  secret: process.env.SESSION_SECRET || 'dev_secret', 
+  resave: false, 
+  saveUninitialized: true 
 }));
 app.use(express.json()); 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
-app.set('views', './views');
 app.set('views', path.join(__dirname, 'views'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Nodemailer setup with App Password
+// Nodemailer setup
 const transporter = nodemailer.createTransport({
-    service: process.env.EMAIL_SERVICE || 'Gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
+  service: process.env.EMAIL_SERVICE || 'Gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
 });
+
+// Define your createAdminIfNotExists and routes below
+
+
 
 // Function to create admin user if not exists
 async function createAdminIfNotExists() {
@@ -109,7 +122,7 @@ async function createAdminIfNotExists() {
             text: `Admin account has been created. Your UID is: A0001 and password is: ${adminPassword}`
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
+        transporter.sendMail(mailOptions, (error) => {
             if (error) {
                 return console.error('Error sending email:', error);
             }
@@ -238,7 +251,7 @@ app.post('/signup', upload.single('image'), async (req, res) => {
             text: `Your OTP for signup is: ${otp}`
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
+        transporter.sendMail(mailOptions, (error) => {
             if (error) {
                 console.error(error);
                 return res.render('signup', { message: 'Invalid email. Please try again.' });
@@ -2434,7 +2447,7 @@ app.post('/staff/attendance/students', async (req, res) => {
         });
 
         const studentIds = students.map(s => s._id.toString());
-        const markedCount = 0;
+        let markedCount = 0;
 
         // Process attendance updates
         for (const [studentId, status] of Object.entries(attendanceUpdates)) {
